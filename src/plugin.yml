@@ -1,10 +1,20 @@
 name: RPG
-main: no.runsafe.rpg.Plugin
+main: nl.naxanria.rpg.Plugin
 version: 1.0.@BUILD@
 authors: []
 depend: []
 description:
 commands:
-  something:
-    description:
-    aliases: []
+  spawn:
+    description: Teleports the user to spawn.
+  rpg:
+    description: Teleports the user to the rpg world.
+  setspawn:
+    decription: Sets the spawn at the user location.
+  spawncreature:
+    description: Spawns a creature;
+  party:
+    description: Party commands
+  partychat:
+    description: Chat in party.
+    aliases: [pc]
