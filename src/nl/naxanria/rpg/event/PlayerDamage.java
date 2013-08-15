@@ -19,7 +19,8 @@ public class PlayerDamage implements IPlayerDamageEvent, IConfigurationChanged
 	}
 
 	@Override
-	public void OnPlayerDamage(RunsafePlayer player, RunsafeEntityDamageEvent event) {
+	public void OnPlayerDamage(RunsafePlayer player, RunsafeEntityDamageEvent event)
+	{
 
 		if (player.getWorld().getName().equalsIgnoreCase(world))
 		{
@@ -58,5 +59,5 @@ public class PlayerDamage implements IPlayerDamageEvent, IConfigurationChanged
 	private String world;
 
 	private final PartyHandler partyHandler;
-	IOutput console;
+	private final IOutput console;
 }
