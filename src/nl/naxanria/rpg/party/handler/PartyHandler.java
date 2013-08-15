@@ -4,17 +4,17 @@ import nl.naxanria.rpg.party.Party;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PartyHandler
 {
 
 	public PartyHandler()
 	{
-		parties = new HashMap<Integer, Party>();
-		partyLink = new HashMap<String, Integer>();
-		invites = new HashMap<String, ArrayList<Integer>>();
-		invitees = new HashMap<String, ArrayList<String>>();
+		parties = new ConcurrentHashMap<Integer, Party>();
+		partyLink = new ConcurrentHashMap<String, Integer>();
+		invites = new ConcurrentHashMap<String, ArrayList<Integer>>();
+		invitees = new ConcurrentHashMap<String, ArrayList<String>>();
 	}
 
 	public void join(RunsafePlayer toJoin, RunsafePlayer joining)
@@ -37,7 +37,8 @@ public class PartyHandler
 	{
 		int searchId = getPartyId(invitee);
 		if (searchId == -1)
-			return invitees.get(player.getName()).contains(invitee.getName());
+			return invitees.containsKey(player.getName()) &&
+					invitees.get(player.getName()).contains(invitee.getName());
 
 		for (int id : invites.get(player.getName()))
 			if (id == searchId) return true;
@@ -120,10 +121,10 @@ public class PartyHandler
 		parties.remove(partyid);
 	}
 
-	private HashMap<Integer, Party> parties;
-	private HashMap<String, Integer> partyLink;
+	private ConcurrentHashMap<Integer, Party> parties;
+	private ConcurrentHashMap<String, Integer> partyLink;
 	private int lastPartyId = 0;
-	private HashMap<String, ArrayList<Integer>> invites;
-	private HashMap<String, ArrayList<String>> invitees;
+	private ConcurrentHashMap<String, ArrayList<Integer>> invites;
+	private ConcurrentHashMap<String, ArrayList<String>> invitees;
 
 }

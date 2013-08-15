@@ -13,7 +13,7 @@ public class CommandPartyJoin extends PlayerCommand
 
 	public CommandPartyJoin(PartyHandler partyHandler)
 	{
-		super("join", "join a party", "rpg.party.join", new PlayerArgument(false));
+		super("join", "join a party", "rpg.party.join", new PlayerArgument(true));
 		this.partyHandler = partyHandler;
 	}
 
