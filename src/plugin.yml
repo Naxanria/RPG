@@ -18,3 +18,5 @@ commands:
   partychat:
     description: Chat in party.
     aliases: [pc]
+  setitemdamage:
+    description: set the item damage

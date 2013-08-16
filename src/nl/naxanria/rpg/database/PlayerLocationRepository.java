@@ -95,13 +95,17 @@ public class PlayerLocationRepository extends Repository implements IConfigurati
 
 	public void safePlayerLocation(RunsafePlayer player)
 	{
-		String sql = "";
+		safePlayerLocation(player, player.getLocation());
+	}
+
+	public void safePlayerLocation(RunsafePlayer player, RunsafeLocation location) {
+		String sql;
 		if(isNew(player))
 			sql = "INSERT INTO playerlocations (location, player) VALUES ('%s', '%s')";
 		else
 			sql = "UPDATE playerlocations SET location = '%s' WHERE player = '%s'";
-		console.fine("Sql: " + String.format(sql, player.getLocation().toString(), player.getName()));
-		database.Update(String.format(sql, player.getLocation().toString(), player.getName()));
+		console.fine("Sql: " + String.format(sql, location.toString(), player.getName()));
+		database.Update(String.format(sql, location.toString(), player.getName()));
 	}
 
 	@Override
@@ -118,4 +122,5 @@ public class PlayerLocationRepository extends Repository implements IConfigurati
 	private final IDatabase database;
 	private final IOutput console;
 	private String rpgWorld = "rpgworld";
+
 }

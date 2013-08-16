@@ -8,12 +8,10 @@ import no.runsafe.framework.minecraft.Buff;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.entity.LivingEntity;
-import no.runsafe.framework.minecraft.entity.RunsafeEntity;
 import no.runsafe.framework.minecraft.entity.RunsafeLivingEntity;
 import no.runsafe.framework.minecraft.inventory.RunsafeEntityEquipment;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.PigZombie;
+
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,24 +29,23 @@ public class CommandSpawnCreature extends PlayerCommand
 
 		types = new ArrayList<String>();
 		for (LivingEntity entity :LivingEntity.values())
+		{
+			if (entity.getName() == null)
+				continue;
 			types.add(entity.getName());
+		}
 
 	}
 
 	@Nullable
 	@Override
 	public List<String> getParameterOptions(@Nonnull String parameter) {
-		ArrayList<String> out = new ArrayList<String>();
 
 		if(parameter.equalsIgnoreCase("type"))
-		{
-			out = types;
-			console.fine(types.toString());
-
-			return out;
-		}
+			return types;
 		else if(parameter.equalsIgnoreCase("useMyGear"))
 		{
+			ArrayList<String> out = new ArrayList<String>();
 			out.add("true");
 			out.add("false");
 			return out;

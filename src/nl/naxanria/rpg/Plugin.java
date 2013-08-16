@@ -1,11 +1,14 @@
 package nl.naxanria.rpg;
 
+import nl.naxanria.rpg.command.admin.CommandSetItemDamage;
 import nl.naxanria.rpg.command.admin.CommandSetSpawn;
 import nl.naxanria.rpg.command.admin.CommandSpawnCreature;
 import nl.naxanria.rpg.command.base.CommandRpg;
 import nl.naxanria.rpg.command.base.CommandSpawn;
 import nl.naxanria.rpg.event.EntityDamageByEntityEvent;
 import nl.naxanria.rpg.event.PlayerDamage;
+import nl.naxanria.rpg.event.PlayerJoinsRpgWorld;
+import nl.naxanria.rpg.event.PlayerRespawn;
 import nl.naxanria.rpg.party.command.*;
 import nl.naxanria.rpg.database.PlayerLocationRepository;
 import nl.naxanria.rpg.party.handler.PartyHandler;
@@ -22,11 +25,14 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlayerLocationRepository.class);
 		//handlers
 		addComponent(PartyHandler.class);
+		addComponent(PlayerHealthHandler.class);
 
 
 		//events
 //		addComponent(PlayerDamage.class);
 		addComponent(EntityDamageByEntityEvent.class);
+		addComponent(PlayerJoinsRpgWorld.class);
+		addComponent(PlayerRespawn.class);
 
 
 		//commands
@@ -34,6 +40,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(CommandSetSpawn.class);
 		addComponent(CommandRpg.class);
 		addComponent(CommandSpawnCreature.class);
+		addComponent(CommandSetItemDamage.class);
 
 		//party command
 		Command party = new Command("party", "party functions", "rpg.party");
