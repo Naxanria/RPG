@@ -7,11 +7,13 @@ import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.Buff;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
+import no.runsafe.framework.minecraft.entity.LivingEntity;
 import no.runsafe.framework.minecraft.entity.RunsafeEntity;
 import no.runsafe.framework.minecraft.entity.RunsafeLivingEntity;
 import no.runsafe.framework.minecraft.inventory.RunsafeEntityEquipment;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.PigZombie;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,10 +30,8 @@ public class CommandSpawnCreature extends PlayerCommand
 				new OptionalArgument("amount"), new OptionalArgument("useMyGear"), new PlayerArgument(false));
 
 		types = new ArrayList<String>();
-		types.add("ZOMBIE");
-		types.add("SKELETON");
-		types.add("SPIDER");
-		types.add("PIG_ZOMBIE");
+		for (LivingEntity entity :LivingEntity.values())
+			types.add(entity.getName());
 
 	}
 
@@ -42,7 +42,8 @@ public class CommandSpawnCreature extends PlayerCommand
 
 		if(parameter.equalsIgnoreCase("type"))
 		{
-			out.addAll(types);
+			out = types;
+			console.fine(types.toString());
 
 			return out;
 		}
@@ -87,6 +88,6 @@ public class CommandSpawnCreature extends PlayerCommand
 		return null;
 	}
 
-	ArrayList<String> types;
+	private ArrayList<String> types;
 
 }
