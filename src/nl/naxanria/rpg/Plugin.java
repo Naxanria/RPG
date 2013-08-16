@@ -4,6 +4,7 @@ import nl.naxanria.rpg.command.admin.CommandSetSpawn;
 import nl.naxanria.rpg.command.admin.CommandSpawnCreature;
 import nl.naxanria.rpg.command.base.CommandRpg;
 import nl.naxanria.rpg.command.base.CommandSpawn;
+import nl.naxanria.rpg.event.EntityDamageByEntityEvent;
 import nl.naxanria.rpg.event.PlayerDamage;
 import nl.naxanria.rpg.party.command.*;
 import nl.naxanria.rpg.database.PlayerLocationRepository;
@@ -24,7 +25,9 @@ public class Plugin extends RunsafeConfigurablePlugin
 
 
 		//events
-		addComponent(PlayerDamage.class);
+//		addComponent(PlayerDamage.class);
+		addComponent(EntityDamageByEntityEvent.class);
+
 
 		//commands
 		addComponent(CommandSpawn.class);
