@@ -1,6 +1,6 @@
 package nl.naxanria.rpg.event;
 
-import nl.naxanria.rpg.PlayerHealthHandler;
+import nl.naxanria.rpg.handler.PlayerHealthHandler;
 import nl.naxanria.rpg.database.PlayerLocationRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.player.IPlayerJoinEvent;

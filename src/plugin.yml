@@ -20,3 +20,5 @@ commands:
     aliases: [pc]
   setitemdamage:
     description: set the item damage
+  rpgdebug:
+    description: starts debug

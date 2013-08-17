@@ -8,4 +8,6 @@ spawn:
   world: Spawn
 health:
   base: 50
-  regen: 1
+  regen: 3
+mobs:
+  base-health: 30
