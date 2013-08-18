@@ -116,7 +116,7 @@ public class PlayerHealthHandler implements IConfigurationChanged
 			return false;
 		}
 
-		return  (inCombat.get(player.getName()) <= 0);
+		return  (inCombat.get(player.getName()) <= 0 && player.getFoodLevel() >= 18);
 	}
 
 	public RunsafePlayer getPlayer(String name)

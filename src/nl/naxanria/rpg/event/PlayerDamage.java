@@ -1,5 +1,7 @@
 package nl.naxanria.rpg.event;
 
+import nl.naxanria.rpg.handler.DebugHandler;
+import nl.naxanria.rpg.handler.PlayerHealthHandler;
 import nl.naxanria.rpg.party.handler.PartyHandler;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IOutput;
@@ -11,11 +13,11 @@ import no.runsafe.framework.minecraft.player.RunsafePlayer;
 public class PlayerDamage implements IPlayerDamageEvent, IConfigurationChanged
 {
 
-
-	public PlayerDamage(PartyHandler partyHandler, IOutput console)
+	public PlayerDamage(IOutput console, PlayerHealthHandler playerHealthHandler, DebugHandler debugHandler)
 	{
-		this.partyHandler = partyHandler;
 		this.console = console;
+		this.playerHealthHandler = playerHealthHandler;
+		this.debugHandler = debugHandler;
 	}
 
 	@Override
@@ -28,23 +30,51 @@ public class PlayerDamage implements IPlayerDamageEvent, IConfigurationChanged
 			console.fine("damage in the world...");
 			console.fine(event.getEventName());
 			console.fine(event.getCause().name());
-			console.fine(event.getEntity().toString());
+			double percent = (event.getDamage() != 0) ? event.getDamage() / 20 : 0;
 
-			if(event.getEntity() instanceof RunsafePlayer)
+			debugHandler.debugMsg(player, String.format("Event: %s - Cause: %s - Damage: %.2f - Percent: %.2f%%",
+					event.getEventName(), event.getCause().name(), event.getDamage(), percent
+			));
+
+
+
+			if (event.getEventName().equalsIgnoreCase("EntityDamageEvent"))
 			{
-				RunsafePlayer damager = (RunsafePlayer) event.getEntity();
-
-				console.fine("It is a player!");
-				boolean sameParty = partyHandler.isInSameParty(damager, player);
-				console.fine("Same party: " + sameParty);
-				console.fine("%s hit %s", damager.getName(), player.getName());
-				if (sameParty)
+				if (event.getCause().name().equalsIgnoreCase("FALL"))
 				{
-					event.cancel();
+					playerHealthHandler.updateHealth(player,
+							-playerHealthHandler.getMaxHealth(player) * percent);
+					event.setDamage(0);
+				}
+				else if (event.getCause().name().equalsIgnoreCase("FIRE"))
+				{
+					playerHealthHandler.updateHealth(player,
+							-playerHealthHandler.getMaxHealth(player) * percent);
+					event.setDamage(0);
+				}
+				else if (event.getCause().name().equalsIgnoreCase("FIRE_TICK"))
+				{
+					playerHealthHandler.updateHealth(player,
+							-playerHealthHandler.getMaxHealth(player) * percent);
+					event.setDamage(0);
+				}
+				else if (event.getCause().name().equalsIgnoreCase("POISON"))
+				{
+					playerHealthHandler.updateHealth(player,
+							-playerHealthHandler.getMaxHealth(player) * percent);
+					event.setDamage(0);
+				}
+				else if (event.getCause().name().equalsIgnoreCase("MAGIC"))
+				{
+					playerHealthHandler.updateHealth(player,
+							-playerHealthHandler.getMaxHealth(player) * percent);
+					event.setDamage(0);
 				}
 
 
 			}
+
+
 		}
 
 	}
@@ -58,6 +88,7 @@ public class PlayerDamage implements IPlayerDamageEvent, IConfigurationChanged
 
 	private String world;
 
-	private final PartyHandler partyHandler;
 	private final IOutput console;
+	private final PlayerHealthHandler playerHealthHandler;
+	private final DebugHandler debugHandler;
 }

@@ -1,7 +1,7 @@
 name: RPG
 main: nl.naxanria.rpg.Plugin
 version: 1.0.@BUILD@
-authors: []
+authors: [Naxanria]
 depend: []
 description:
 commands:
@@ -22,3 +22,5 @@ commands:
     description: set the item damage
   rpgdebug:
     description: starts debug
+  setmaxhealth:
+    description: Sets the maxhealth of a player.

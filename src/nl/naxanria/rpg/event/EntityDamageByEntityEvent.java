@@ -1,15 +1,16 @@
 package nl.naxanria.rpg.event;
 
+import nl.naxanria.rpg.BaseHealth;
+import nl.naxanria.rpg.handler.DamageHandler;
 import nl.naxanria.rpg.handler.DebugHandler;
 import nl.naxanria.rpg.handler.MobHealthHandler;
 import nl.naxanria.rpg.handler.PlayerHealthHandler;
 import nl.naxanria.rpg.party.handler.PartyHandler;
+
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.entity.IEntityDamageByEntityEvent;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.api.minecraft.RunsafeEntityType;
-import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.entity.*;
 import no.runsafe.framework.minecraft.event.entity.RunsafeEntityDamageByEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
@@ -19,13 +20,14 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 {
 
 	public EntityDamageByEntityEvent(PartyHandler partyHandler, IOutput console, PlayerHealthHandler playerHealthHandler,
-																	 MobHealthHandler mobHealthHandler, DebugHandler debugHandler)
+																	 MobHealthHandler mobHealthHandler, DebugHandler debugHandler, DamageHandler damageHandler)
 	{
 		this.partyHandler = partyHandler;
 		this.console = console;
 		this.playerHealthHandler = playerHealthHandler;
 		this.mobHealthHandler = mobHealthHandler;
 		this.debugHandler = debugHandler;
+		this.damageHandler = damageHandler;
 	}
 
 	@Override
@@ -69,48 +71,25 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 				damageActor = ((RunsafeProjectile) damageActor).getShooter();
 				damageFactor = 1;
 			}
-
-
 		}
 
 		//damage calculations
-
 		if (damageActor instanceof RunsafeLivingEntity && damaged instanceof RunsafeLivingEntity)
 		{
 
-
-
 			RunsafeMeta hittingItem = ((RunsafeLivingEntity)damageActor).getEquipment().getItemInHand();
-			if (hittingItem == null) // fist
+			damage = damageHandler.getDamage(hittingItem);
+			if (projectile && !damageHandler.isBow(hittingItem))
 				damage = 1;
-			else
-			{
-				if (hittingItem.hasLore() && hittingItem.getLore() != null)
-				 //get actual intended damage
-					for (String line : hittingItem.getLore())
-						if (line != null && line.contains("dmg"))
-						{
-							damage = Double.valueOf(line.split("§f")[1]);
-							break;
-						}
-				if (!isSword(hittingItem))
-					if(isBow(hittingItem))
-					{
-						if(!projectile)
-							damage = 1;
-					}else{
-						damage = 1;
-					}
-			}
-
 
 			damage *= damageFactor;
 
+			double baseHealth = BaseHealth.getBaseHealth((RunsafeLivingEntity) damaged);
 
 			if(damaged instanceof RunsafePlayer)
 			{
 				if (!playerHealthHandler.keepsTrackOf((RunsafePlayer) damaged))
-					playerHealthHandler.addPlayer((RunsafePlayer) damaged);
+					playerHealthHandler.addPlayer((RunsafePlayer) damaged, baseHealth, baseHealth);
 				playerHealthHandler.updateHealth((RunsafePlayer) damaged, -damage);
 				playerHealthHandler.startCombatCooldown((RunsafePlayer) damaged);
 				event.setDamage(0);
@@ -125,7 +104,7 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 			else
 			{
 				if(!mobHealthHandler.keepsTrack((RunsafeLivingEntity) damaged))
-					mobHealthHandler.addEntity((RunsafeLivingEntity) damaged);
+					mobHealthHandler.addEntity((RunsafeLivingEntity) damaged, baseHealth);
 				mobHealthHandler.updateHealth((RunsafeLivingEntity) damaged, -damage);
 				event.setDamage(0);
 				if(damageActor instanceof  RunsafePlayer)
@@ -141,22 +120,6 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 		}
 	}
 
-	private boolean isSword(RunsafeMeta item)
-	{
-		return item.is(Item.Combat.Sword.Diamond) ||
-				item.is(Item.Combat.Sword.Iron) ||
-				item.is(Item.Combat.Sword.Gold) ||
-				item.is(Item.Combat.Sword.Stone) ||
-				item.is(Item.Combat.Sword.Wood);
-	}
-
-	private boolean isBow(RunsafeMeta item)
-	{
-		return item.is(Item.Combat.Bow);
-	}
-
-
-
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{
@@ -169,6 +132,7 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 	private final MobHealthHandler mobHealthHandler;
 	private final IOutput console;
 	private final DebugHandler debugHandler;
+	private final DamageHandler damageHandler;
 
 
 
