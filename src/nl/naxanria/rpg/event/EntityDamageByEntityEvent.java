@@ -8,8 +8,9 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.entity.IEntityDamageByEntityEvent;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.entity.RunsafeEntity;
-import no.runsafe.framework.minecraft.entity.RunsafeLivingEntity;
+import no.runsafe.framework.api.minecraft.RunsafeEntityType;
+import no.runsafe.framework.minecraft.Item;
+import no.runsafe.framework.minecraft.entity.*;
 import no.runsafe.framework.minecraft.event.entity.RunsafeEntityDamageByEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -32,6 +33,9 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 	{
 		if(!event.getEntity().getWorld().getName().equalsIgnoreCase(world))
 			return;
+		double damage = 3;
+		double damageFactor = 1;
+		boolean projectile = false;
 
 		RunsafeEntity damageActor = event.getDamageActor();
 		RunsafeEntity damaged = event.getEntity();
@@ -49,17 +53,38 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 			}
 		}
 
+		if (damageActor instanceof RunsafeProjectile)
+		{
+			projectile = true;
+			if(event.getDamage() < 5)
+				damageFactor = 0;
+			else
+				damageFactor = (event.getDamage() / 10);
+
+
+			if(((RunsafeProjectile) damageActor).getShooterPlayer() != null)
+				damageActor = ((RunsafeProjectile) damageActor).getShooterPlayer();
+			else if(((RunsafeProjectile)damageActor).getShooter() != null)
+			{
+				damageActor = ((RunsafeProjectile) damageActor).getShooter();
+				damageFactor = 1;
+			}
+
+
+		}
+
 		//damage calculations
 
 		if (damageActor instanceof RunsafeLivingEntity && damaged instanceof RunsafeLivingEntity)
 		{
 
-			double damage = 3;
+
 
 			RunsafeMeta hittingItem = ((RunsafeLivingEntity)damageActor).getEquipment().getItemInHand();
 			if (hittingItem == null) // fist
 				damage = 1;
 			else
+			{
 				if (hittingItem.hasLore() && hittingItem.getLore() != null)
 				 //get actual intended damage
 					for (String line : hittingItem.getLore())
@@ -68,6 +93,18 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 							damage = Double.valueOf(line.split("§f")[1]);
 							break;
 						}
+				if (!isSword(hittingItem))
+					if(isBow(hittingItem))
+					{
+						if(!projectile)
+							damage = 1;
+					}else{
+						damage = 1;
+					}
+			}
+
+
+			damage *= damageFactor;
 
 
 			if(damaged instanceof RunsafePlayer)
@@ -103,6 +140,21 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 			}
 		}
 	}
+
+	private boolean isSword(RunsafeMeta item)
+	{
+		return item.is(Item.Combat.Sword.Diamond) ||
+				item.is(Item.Combat.Sword.Iron) ||
+				item.is(Item.Combat.Sword.Gold) ||
+				item.is(Item.Combat.Sword.Stone) ||
+				item.is(Item.Combat.Sword.Wood);
+	}
+
+	private boolean isBow(RunsafeMeta item)
+	{
+		return item.is(Item.Combat.Bow);
+	}
+
 
 
 	@Override

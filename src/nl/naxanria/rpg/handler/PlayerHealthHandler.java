@@ -74,6 +74,13 @@ public class PlayerHealthHandler implements IConfigurationChanged
 
 	}
 
+	public void resetHealth(RunsafePlayer player)
+	{
+		healthMap.get(player.getName()).put("health",
+				healthMap.get(player.getName()).get("maxHealth"));
+		player.setLevel((int) getMaxHealth(player));
+	}
+
 	public void setMaxHealth(RunsafePlayer player, double maxHealth)
 	{
 		if (!keepsTrackOf(player))

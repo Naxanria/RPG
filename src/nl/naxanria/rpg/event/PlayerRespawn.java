@@ -19,7 +19,7 @@ public class PlayerRespawn implements IPlayerRespawn, IConfigurationChanged
 	public RunsafeLocation OnPlayerRespawn(RunsafePlayer player, RunsafeLocation location, boolean b)
 	{
 		if(player.getWorld().getName().equalsIgnoreCase(world))
-			playerHealthHandler.updateHealth(player, playerHealthHandler.getMaxHealth(player));
+			playerHealthHandler.resetHealth(player);
 		return null;
 	}
 
