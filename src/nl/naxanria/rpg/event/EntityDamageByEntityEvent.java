@@ -1,7 +1,7 @@
 package nl.naxanria.rpg.event;
 
-import nl.naxanria.rpg.BaseHealth;
-import nl.naxanria.rpg.handler.DamageHandler;
+import nl.naxanria.rpg.base.BaseDamage;
+import nl.naxanria.rpg.base.BaseHealth;
 import nl.naxanria.rpg.handler.DebugHandler;
 import nl.naxanria.rpg.handler.MobHealthHandler;
 import nl.naxanria.rpg.handler.PlayerHealthHandler;
@@ -20,14 +20,13 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 {
 
 	public EntityDamageByEntityEvent(PartyHandler partyHandler, IOutput console, PlayerHealthHandler playerHealthHandler,
-																	 MobHealthHandler mobHealthHandler, DebugHandler debugHandler, DamageHandler damageHandler)
+																	 MobHealthHandler mobHealthHandler, DebugHandler debugHandler)
 	{
 		this.partyHandler = partyHandler;
 		this.console = console;
 		this.playerHealthHandler = playerHealthHandler;
 		this.mobHealthHandler = mobHealthHandler;
 		this.debugHandler = debugHandler;
-		this.damageHandler = damageHandler;
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 	{
 		if(!event.getEntity().getWorld().getName().equalsIgnoreCase(world))
 			return;
-		double damage = 3;
+		double damage;
 		double damageFactor = 1;
 		boolean projectile = false;
 
@@ -78,8 +77,8 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 		{
 
 			RunsafeMeta hittingItem = ((RunsafeLivingEntity)damageActor).getEquipment().getItemInHand();
-			damage = damageHandler.getDamage(hittingItem);
-			if (projectile && !damageHandler.isBow(hittingItem))
+			damage = BaseDamage.getDamage(hittingItem);
+			if (projectile && !BaseDamage.isBow(hittingItem))
 				damage = 1;
 
 			damage *= damageFactor;
@@ -132,8 +131,5 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 	private final MobHealthHandler mobHealthHandler;
 	private final IOutput console;
 	private final DebugHandler debugHandler;
-	private final DamageHandler damageHandler;
-
-
 
 }

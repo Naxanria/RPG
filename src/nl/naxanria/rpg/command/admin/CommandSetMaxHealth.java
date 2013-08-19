@@ -1,5 +1,6 @@
 package nl.naxanria.rpg.command.admin;
 
+import nl.naxanria.rpg.base.BaseHealth;
 import nl.naxanria.rpg.handler.DebugHandler;
 import nl.naxanria.rpg.handler.PlayerHealthHandler;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
@@ -23,11 +24,6 @@ public class CommandSetMaxHealth extends PlayerCommand
 	@Override
 	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
-
-		double newHealth = Double.valueOf(parameters.get("health"));
-		if (newHealth <= 0)
-			return "&cAtleast a value of 1 or higher is expected!";
-
 		RunsafePlayer player;
 		if (!parameters.containsKey("player"))
 			player = executor;
@@ -37,8 +33,15 @@ public class CommandSetMaxHealth extends PlayerCommand
 
 			if (player == null)
 				return "&cCould not find the player";
-
 		}
+
+		double newHealth;
+		if (parameters.get("health").equalsIgnoreCase("base"))
+			newHealth = BaseHealth.getBaseHealth(player);
+		else
+			newHealth = Double.valueOf(parameters.get("health"));
+		if (newHealth <= 0)
+			return "&cAtleast a value of 1 or higher is expected!";
 
 		if (!healthHandler.keepsTrackOf(player))
 			healthHandler.addPlayer(player, newHealth, newHealth);
@@ -46,7 +49,7 @@ public class CommandSetMaxHealth extends PlayerCommand
 			healthHandler.setMaxHealth(player, newHealth);
 
 
-		return "&2Updated the health of " + player.getPrettyName();
+		return "&2Updated the maximum health of " + player.getPrettyName() + "&2 to &f" + newHealth;
 
 	}
 

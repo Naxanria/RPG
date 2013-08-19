@@ -1,13 +1,13 @@
-package nl.naxanria.rpg.handler;
+package nl.naxanria.rpg.base;
 
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 
-public class DamageHandler
+public class BaseDamage
 {
 
 
-	public double getDamage(RunsafeMeta item)
+	public static double getDamage(RunsafeMeta item)
 	{
 
 		double damage = 1;
@@ -26,12 +26,13 @@ public class DamageHandler
 		else
 			{
 				damage = getDefaultDamage(item);
+				item.addLore("§cdmg: §f" + damage);
 			}
 
 		return damage;
 	}
 
-	public boolean isSword(RunsafeMeta item)
+	public static boolean isSword(RunsafeMeta item)
 	{
 		return item.is(Item.Combat.Sword.Diamond) ||
 				item.is(Item.Combat.Sword.Iron) ||
@@ -40,7 +41,7 @@ public class DamageHandler
 				item.is(Item.Combat.Sword.Wood);
 	}
 
-	public boolean isAxe(RunsafeMeta item)
+	public static boolean isAxe(RunsafeMeta item)
 	{
 		return item.is(Item.Tool.Axe.Diamond) ||
 				item.is(Item.Tool.Axe.Gold) ||
@@ -49,23 +50,23 @@ public class DamageHandler
 				item.is(Item.Tool.Axe.Wood);
 	}
 
-	public boolean isBow(RunsafeMeta item)
+	public static boolean isBow(RunsafeMeta item)
 	{
 		return item.is(Item.Combat.Bow);
 	}
 
-	public boolean isWeapon(RunsafeMeta item)
+	public static boolean isWeapon(RunsafeMeta item)
 	{
 		return isAxe(item) || isBow(item) || isSword(item);
 	}
 
-	private double getDefaultDamage(RunsafeMeta item)
+	private static double getDefaultDamage(RunsafeMeta item)
 	{
 		if (isBow(item))
-			return 5;
+			return 7;
 
 		if (item.is(Item.Combat.Sword.Wood))
-			return 3;
+			return 5;
 		if (item.is(Item.Combat.Sword.Stone))
 			return 8;
 		if (item.is(Item.Combat.Sword.Iron))

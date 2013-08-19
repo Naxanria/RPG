@@ -1,9 +1,7 @@
 package nl.naxanria.rpg;
 
-import nl.naxanria.rpg.command.admin.CommandSetItemDamage;
-import nl.naxanria.rpg.command.admin.CommandSetMaxHealth;
-import nl.naxanria.rpg.command.admin.CommandSetSpawn;
-import nl.naxanria.rpg.command.admin.CommandSpawnCreature;
+import nl.naxanria.rpg.base.BaseDamage;
+import nl.naxanria.rpg.command.admin.*;
 import nl.naxanria.rpg.command.base.CommandDebug;
 import nl.naxanria.rpg.command.base.CommandRpg;
 import nl.naxanria.rpg.command.base.CommandSpawn;
@@ -11,13 +9,16 @@ import nl.naxanria.rpg.event.EntityDamageByEntityEvent;
 import nl.naxanria.rpg.event.PlayerDamage;
 import nl.naxanria.rpg.event.PlayerJoinsRpgWorld;
 import nl.naxanria.rpg.event.PlayerRespawn;
-import nl.naxanria.rpg.handler.DamageHandler;
 import nl.naxanria.rpg.handler.DebugHandler;
 import nl.naxanria.rpg.handler.MobHealthHandler;
 import nl.naxanria.rpg.handler.PlayerHealthHandler;
 import nl.naxanria.rpg.party.command.*;
 import nl.naxanria.rpg.database.PlayerLocationRepository;
 import nl.naxanria.rpg.party.handler.PartyHandler;
+import nl.naxanria.rpg.spawning.command.CommandAddSpawner;
+import nl.naxanria.rpg.spawning.command.CommandRemoveSpawner;
+import nl.naxanria.rpg.spawning.command.SpawnerCommand;
+import nl.naxanria.rpg.spawning.handler.SpawnHandler;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
 
@@ -34,7 +35,8 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlayerHealthHandler.class);
 		addComponent(MobHealthHandler.class);
 		addComponent(DebugHandler.class);
-		addComponent(DamageHandler.class);
+		addComponent(BaseDamage.class);
+		addComponent(SpawnHandler.class);
 
 
 		//events
@@ -64,6 +66,12 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(party);
 
 		addComponent(CommandPartyChat.class);
+
+		SpawnerCommand spawner = new SpawnerCommand("spawner", "Spawning stuff", "rpg.spawner");
+		spawner.addSubCommand(getInstance(CommandAddSpawner.class));
+		spawner.addSubCommand(getInstance(CommandRemoveSpawner.class));
+
+		addComponent(spawner);
 
 		//update ticker
 		addComponent(CoreTicker.class);

@@ -70,6 +70,12 @@ public class PlayerDamage implements IPlayerDamageEvent, IConfigurationChanged
 							-playerHealthHandler.getMaxHealth(player) * percent);
 					event.setDamage(0);
 				}
+				else if (event.getCause().name().equalsIgnoreCase("STARVATION"))
+				{
+					playerHealthHandler.updateHealth(player,
+							-playerHealthHandler.getMaxHealth(player) * percent);
+					event.setDamage(0);
+				}
 
 
 			}

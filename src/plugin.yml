@@ -24,3 +24,5 @@ commands:
     description: starts debug
   setmaxhealth:
     description: Sets the maxhealth of a player.
+  spawner:
+    description: spawner commands.

@@ -72,7 +72,7 @@ public class CommandSpawnCreature extends PlayerCommand
 		for (int i = 0; i < amount; i++)
 		{
 			RunsafeLivingEntity entity = (RunsafeLivingEntity)  executor.getWorld().spawnCreature(location, type);
-
+			if (entity == null) return "&cInvalid type";
 			if(usePlayerGear)
 			{
 				RunsafeEntityEquipment equipment = executor.getEquipment();
