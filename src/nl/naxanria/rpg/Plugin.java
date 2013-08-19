@@ -5,10 +5,7 @@ import nl.naxanria.rpg.command.admin.*;
 import nl.naxanria.rpg.command.base.CommandDebug;
 import nl.naxanria.rpg.command.base.CommandRpg;
 import nl.naxanria.rpg.command.base.CommandSpawn;
-import nl.naxanria.rpg.event.EntityDamageByEntityEvent;
-import nl.naxanria.rpg.event.PlayerDamage;
-import nl.naxanria.rpg.event.PlayerJoinsRpgWorld;
-import nl.naxanria.rpg.event.PlayerRespawn;
+import nl.naxanria.rpg.event.*;
 import nl.naxanria.rpg.handler.DebugHandler;
 import nl.naxanria.rpg.handler.MobHealthHandler;
 import nl.naxanria.rpg.handler.PlayerHealthHandler;
@@ -44,6 +41,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(EntityDamageByEntityEvent.class);
 		addComponent(PlayerJoinsRpgWorld.class);
 		addComponent(PlayerRespawn.class);
+		addComponent(EntityDeathEvent.class);
 
 
 		//commands

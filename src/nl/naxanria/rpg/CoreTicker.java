@@ -32,7 +32,7 @@ public class CoreTicker implements IPluginEnabled, IConfigurationChanged
 		if(ticker % spawnHandler.SPAWN_PULSE_COOLDOWN == 0)
 			spawnHandler.SpawnPulse();
 
-		this.scheduler.startAsyncTask(
+		this.scheduler.startSyncTask(
 				new Runnable() {
 					@Override
 					public void run() {
@@ -52,7 +52,7 @@ public class CoreTicker implements IPluginEnabled, IConfigurationChanged
 	@Override
 	public void OnPluginEnabled()
 	{
-		int id = this.scheduler.startAsyncTask(
+		int id = this.scheduler.startSyncTask(
 				new Runnable() {
 					@Override
 					public void run() {

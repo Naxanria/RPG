@@ -57,10 +57,12 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 		if (damageActor instanceof RunsafeProjectile)
 		{
 			projectile = true;
-			if(event.getDamage() < 5)
+			if(event.getDamage() < 2)
 				damageFactor = 0;
+			else if (event.getDamage() < 5)
+				damageFactor = 0.3;
 			else
-				damageFactor = (event.getDamage() / 10);
+				damageFactor = Math.min(event.getDamage() / 10 + 0.15 , 1);
 
 
 			if(((RunsafeProjectile) damageActor).getShooterPlayer() != null)
