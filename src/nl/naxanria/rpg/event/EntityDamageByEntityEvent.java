@@ -45,13 +45,21 @@ public class EntityDamageByEntityEvent implements IEntityDamageByEntityEvent, IC
 		if(damageActor instanceof RunsafePlayer  && damaged instanceof RunsafePlayer)
 		{
 
-			if (partyHandler.isInSameParty((RunsafePlayer) damageActor, (RunsafePlayer) damaged))
-			{
-				debugHandler.debugMsg((RunsafePlayer) damageActor, "canceled damage - same party");
-				debugHandler.debugMsg((RunsafePlayer) damaged, "canceled damage - same party");
-				event.setDamage(0);
-				return;
-			}
+			//pvp off... for now...
+
+			debugHandler.debugMsg((RunsafePlayer) damageActor, "pvp disabled");
+			debugHandler.debugMsg((RunsafePlayer) damaged, "pvp disabled");
+
+			event.setDamage(0);
+			return;
+
+//			if (partyHandler.isInSameParty((RunsafePlayer) damageActor, (RunsafePlayer) damaged))
+//			{
+//				debugHandler.debugMsg((RunsafePlayer) damageActor, "canceled damage - same party");
+//				debugHandler.debugMsg((RunsafePlayer) damaged, "canceled damage - same party");
+//				event.setDamage(0);
+//				return;
+//			}
 		}
 
 		if (damageActor instanceof RunsafeProjectile)

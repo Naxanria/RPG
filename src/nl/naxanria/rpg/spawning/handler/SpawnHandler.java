@@ -100,8 +100,8 @@ public class SpawnHandler
 	private ConcurrentHashMap<Integer, SpawnPoint> spawns = new ConcurrentHashMap<Integer, SpawnPoint>();
 
 	public final int AMOUNT_SPAWN = 2;
-	public final int DEFAULT_RANGE = 50;
-	public final int MAX_AMOUNT = 6;
+	public final int DEFAULT_RANGE = 128;
+	public final int MAX_AMOUNT = 4;
 	public final int SPAWN_PULSE_COOLDOWN = 30;
 
 	private int lastId = 0;

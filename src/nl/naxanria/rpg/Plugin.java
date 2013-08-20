@@ -16,6 +16,7 @@ import nl.naxanria.rpg.spawning.command.CommandAddSpawner;
 import nl.naxanria.rpg.spawning.command.CommandRemoveSpawner;
 import nl.naxanria.rpg.spawning.command.SpawnerCommand;
 import nl.naxanria.rpg.spawning.handler.SpawnHandler;
+import nl.naxanria.rpg.stats.StatsHandler;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
 
@@ -34,6 +35,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(DebugHandler.class);
 		addComponent(BaseDamage.class);
 		addComponent(SpawnHandler.class);
+		addComponent(StatsHandler.class);
 
 
 		//events
@@ -42,6 +44,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlayerJoinsRpgWorld.class);
 		addComponent(PlayerRespawn.class);
 		addComponent(EntityDeathEvent.class);
+		addComponent(InventoryChangeEvent.class);
 
 
 		//commands

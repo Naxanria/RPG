@@ -57,6 +57,7 @@ public class CommandAddSpawner extends PlayerCommand
 		RunsafeLocation location = executor.getTarget().getLocation();
 		if (location == null)
 			return "&cOut of range!";
+		location.incrementY(2);
 
 		LivingEntity type = LivingEntity.valueOf(parameters.get("type"));
 		if (type == null || type == LivingEntity.Player)

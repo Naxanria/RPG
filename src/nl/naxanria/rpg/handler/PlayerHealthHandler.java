@@ -134,6 +134,23 @@ public class PlayerHealthHandler implements IConfigurationChanged
 		}
 	}
 
+	public void regen(RunsafePlayer player)
+	{
+		if(canRegen(player))
+			updateHealth(player, getRegen(player));
+	}
+
+	public void decreaseCombatCooldown(RunsafePlayer player)
+	{
+		String playerName = player.getName();
+		int combatCd = inCombat.get(playerName);
+		if (combatCd > 0)
+		{
+			inCombat.put(playerName, combatCd - 1);
+			console.fine("%s cooldown is now %d", playerName, combatCd -1);
+		}
+	}
+
 	public void decreaseCombatCooldownAll()
 	{
 		for (String playerName : inCombat.keySet())
@@ -151,10 +168,19 @@ public class PlayerHealthHandler implements IConfigurationChanged
 	{
 		int cd = 5;
 		inCombat.put(player.getName(), cd);
-		console.fine("Cooldown stated");
+		console.fine("Cooldown started for " + player.getName());
 
 	}
 
+	public double getBaseRegen()
+	{
+		return baseRegen;
+	}
+
+	public void setRegen(RunsafePlayer player, double regen)
+	{
+		healthMap.get(player.getName()).put("regen", regen);
+	}
 
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
@@ -171,4 +197,5 @@ public class PlayerHealthHandler implements IConfigurationChanged
 	private double baseRegen = 1;
 
 	private final IOutput console;
+
 }
