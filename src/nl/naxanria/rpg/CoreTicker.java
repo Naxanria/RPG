@@ -24,15 +24,14 @@ public class CoreTicker implements IPluginEnabled, IConfigurationChanged
 	{
 		this.playerHealthHandler.decreaseCombatCooldownAll();
 		ticker++;
-		if(ticker % 5 == 0)
-			this.playerHealthHandler.regenAll();
+		this.playerHealthHandler.regenAll();
 		if (ticker % healtUpdateTicks == 0)
 			for (RunsafePlayer player : RunsafeServer.Instance.getWorld(world).getPlayers())
 				player.setLevel((int) this.playerHealthHandler.getHealth(player));
 		if(ticker % spawnHandler.SPAWN_PULSE_COOLDOWN == 0)
 			spawnHandler.SpawnPulse();
 
-		this.scheduler.startSyncTask(
+		id = this.scheduler.startSyncTask(
 				new Runnable() {
 					@Override
 					public void run() {
@@ -41,26 +40,36 @@ public class CoreTicker implements IPluginEnabled, IConfigurationChanged
 				}, 1
 		);
 
+	}
+
+	public void stopTicking()
+	{
+		scheduler.cancelTask(id);
+	}
+
+	public void startTicking()
+	{
+		tick();
+	}
+
+	public void restartTicking()
+	{
+		stopTicking();
+		startTicking();
 	}
 
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{
+		stopTicking();
 		world = configuration.getConfigValueAsString("world");
+		startTicking();
 	}
 
 	@Override
 	public void OnPluginEnabled()
 	{
-		int id = this.scheduler.startSyncTask(
-				new Runnable() {
-					@Override
-					public void run() {
-						tick();
-					}
-				}, 1
-		);
-
+		startTicking();
 	}
 
 	private final IScheduler scheduler;
@@ -69,6 +78,7 @@ public class CoreTicker implements IPluginEnabled, IConfigurationChanged
 
 	private int healtUpdateTicks = 3;
 	private int ticker = 0;
+	int id;
 
 	private String world;
 

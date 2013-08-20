@@ -1,5 +1,6 @@
 package nl.naxanria.rpg.event;
 
+import nl.naxanria.rpg.base.BaseHealth;
 import nl.naxanria.rpg.handler.PlayerHealthHandler;
 import nl.naxanria.rpg.database.PlayerLocationRepository;
 import no.runsafe.framework.api.IConfiguration;
@@ -27,7 +28,10 @@ public class PlayerJoinsRpgWorld implements IPlayerJoinEvent, IPlayerTeleportEve
 		if(player.getWorld().getName().equalsIgnoreCase(world))
 		{
 			if (!playerHealthHandler.keepsTrackOf(player))
-				playerHealthHandler.addPlayer(player);
+			{
+				double playerHealth = BaseHealth.getBaseHealth(player);
+				playerHealthHandler.addPlayer(player, playerHealth, playerHealth);
+			}
 		}
 	}
 
